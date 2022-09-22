@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>sql-query.xml file</comment>
+	<!-- 메뉴명 중복 확인 -->
+	<entry key = "menuDupCheck">
+		SELECT MENU_NM FROM MENU WHERE MENU_NM = ?
+	</entry>
+	
+	<!-- 메뉴 추가 -->
+	<entry key = "addMenu">
+		INSERT INTO MENU(MENU_NO, MENU_NAME, MENU_PRICE) VALUES(?,?,?)
+	</entry>
+</properties>
