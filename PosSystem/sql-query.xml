@@ -9,6 +9,33 @@
 	
 	<!-- 메뉴 추가 -->
 	<entry key = "addMenu">
-		INSERT INTO MENU(MENU_NO, MENU_NAME, MENU_PRICE) VALUES(?,?,?)
+		INSERT INTO MENU VALUES(SEQ_MENU_NO.NEXTVAL, ?, ?, DEFAULT)
+	</entry>
+	
+	<!-- 메뉴 목록(Select) -->
+	<entry key = "showMenuList">
+		SELECT * FROM MENU WHERE SALE_FL = 'Y'
+	</entry>
+	
+	<!-- 메뉴 삭제 -->
+	<entry key = "deleteMenu">
+		UPDATE MENU SET SALE_FL = 'N' WHERE MENU_NO = ?
+	</entry>
+	
+	<!-- 메뉴 주문 -->
+	<entry key = "orderMenu">
+		INSERT INTO ORDER_TB VALUES(SEQ_ORDER_NO.NEXTVAL, ?, ?, DEFAULT)
+	</entry>
+	
+	<!-- 주문 번호 생성 -->
+	<entry key = "orderNo">
+		SELECT SEQ_ORDER_NO.NEXTVAL FROM DUAL
+	</entry>
+	
+	<!-- 메뉴 가격 변동 -->
+	<entry key = "updatePrice">
+		UPDATE MENU SET MENU_PRICE = ?
+		WHERE SALE_FL = 'Y'
+		AND MENU_NO = ?
 	</entry>
 </properties>

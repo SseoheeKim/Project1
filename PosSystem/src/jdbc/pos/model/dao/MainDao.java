@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import jdbc.pos.model.vo.Menu;
@@ -67,9 +69,8 @@ public class MainDao {
 			String sql = prop.getProperty("addMenu");
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, menu.getMenuNo());
 			pstmt.setString(1, menu.getMenuName());
-			pstmt.setInt(3, menu.getMenuPrice());
+			pstmt.setInt(2, menu.getMenuPrice());
 			
 			result = pstmt.executeUpdate();
 			
@@ -77,6 +78,113 @@ public class MainDao {
 			close(pstmt);
 		}
 		
+		return result;
+	}
+
+
+	public List<Menu> showMenuList(Connection conn) throws Exception {
+		List<Menu> menuList = new ArrayList();
+		
+		try {
+			String sql = prop.getProperty("showMenuList");
+			
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				Menu menu = new Menu();
+				menu.setMenuNo(rs.getInt(1));
+				menu.setMenuName(rs.getString(2));
+				menu.setMenuPrice(rs.getInt(3));
+				menu.setSaleFlag(rs.getString(4)); 
+				
+				menuList.add(menu);
+			}
+			
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		return menuList;
+	}
+
+
+	public int deleteMenu(Connection conn, int input) throws Exception {
+		int result = 0;
+		try {
+			String sql = prop.getProperty("deleteMenu");
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, input);
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	
+	
+	public int orderMenu(Connection conn, Menu menu) throws Exception {
+		int result = 0; 
+		
+		try {
+			String sql = prop.getProperty("orderMenu");
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, menu.getMenuNo());
+			pstmt.setInt(2, menu.getSalesQuentity());
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+	public int selectOrderNo(Connection conn) throws Exception{
+		int orderNo = 0;
+		
+		try {
+			String sql = prop.getProperty("orderNo");
+			
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next()) {
+				orderNo = rs.getInt(1);
+			}
+			
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		
+		return orderNo;
+	}
+
+
+	public int updatePrice(Connection conn, Menu menu) throws Exception {
+		int result = 0;
+		
+		try {
+			String sql = prop.getProperty("updatePrice");
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, menu.getMenuPrice());
+			pstmt.setInt(2, menu.getMenuNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
 		return result;
 	}
 
