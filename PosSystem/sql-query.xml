@@ -24,11 +24,11 @@
 	
 	<!-- 메뉴 주문 -->
 	<entry key = "orderMenu">
-		INSERT INTO ORDER_TB VALUES(SEQ_ORDER_NO.NEXTVAL, ?, ?, DEFAULT)
+		INSERT INTO ORDER_TB VALUES(?, ?, ?, DEFAULT)
 	</entry>
 	
 	<!-- 주문 번호 생성 -->
-	<entry key = "orderNo">
+	<entry key = "nextOrderNo">
 		SELECT SEQ_ORDER_NO.NEXTVAL FROM DUAL
 	</entry>
 	

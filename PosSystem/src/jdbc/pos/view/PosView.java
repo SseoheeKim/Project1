@@ -51,8 +51,6 @@ public class PosView {
 
 	
 
-	
-
 	/**
 	 * 메뉴 주문
 	 */
@@ -67,16 +65,17 @@ public class PosView {
 				int menuNo = sc.nextInt();
 				
 				System.out.print("수량 > ");
-				int salesQuautity = sc.nextInt();
+				int order = sc.nextInt();
 				
 				Menu menu = new Menu();
 				menu.setMenuNo(menuNo);
-				menu.setSalesQuentity(salesQuautity);
+				menu.setOrderQuentity(order);
 				
 				int result = service.orderMenu(menu);
 				
 				if(result > 0) {
-					System.out.println("\n" + menu.getMenuName() + "을/를 " + salesQuautity+ "개 주문하셨습니다.");
+					Menu m = new Menu();
+					System.out.println("\n" + m.getMenuName() + "을/를 " + order+ "개 주문하셨습니다.");
 						
 				} else {
 					System.out.println("\n주문 실패");
@@ -108,7 +107,9 @@ public class PosView {
 				int result = service.menuDupCheck(menuName);
 				
 				if (result == 0) {
-					System.out.println("\n" + menuName + "는/은 등록 가능한 메뉴입니다.");
+					Menu m = new Menu();
+					m.setMenuName(menuName);
+					System.out.println("\n" + m.getMenuName() + "는/은 등록 가능한 메뉴입니다.");
 					break;
 				} else {
 					System.out.println("\n이미 존재하는 메뉴입니다.");
@@ -222,7 +223,9 @@ public class PosView {
 			int result = service.updatePrice(menu);
 			
 			if(result > 0) {
-				System.out.println("\n가격 변경 성공");
+				Menu m = new Menu();
+				m.setMenuPrice(price);
+				System.out.println("\n가격을 " + m.getMenuPrice() + "원으로 변경합니다.");
 				
 			} else {
 				System.out.println("\n가격 변동 실패");

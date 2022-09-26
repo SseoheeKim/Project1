@@ -82,6 +82,11 @@ public class MainDao {
 	}
 
 
+	/** 메뉴 목록 조회(select)
+	 * @param conn
+	 * @return menuList
+	 * @throws Exception
+	 */
 	public List<Menu> showMenuList(Connection conn) throws Exception {
 		List<Menu> menuList = new ArrayList();
 		
@@ -109,6 +114,12 @@ public class MainDao {
 	}
 
 
+	/** 메뉴 삭제
+	 * @param conn
+	 * @param input
+	 * @return result
+	 * @throws Exception
+	 */
 	public int deleteMenu(Connection conn, int input) throws Exception {
 		int result = 0;
 		try {
@@ -128,6 +139,12 @@ public class MainDao {
 
 	
 	
+	/** 메뉴 주문 
+	 * @param conn
+	 * @param menu
+	 * @return
+	 * @throws Exception
+	 */
 	public int orderMenu(Connection conn, Menu menu) throws Exception {
 		int result = 0; 
 		
@@ -135,8 +152,9 @@ public class MainDao {
 			String sql = prop.getProperty("orderMenu");
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, menu.getMenuNo());
-			pstmt.setInt(2, menu.getSalesQuentity());
+			pstmt.setInt(1, menu.getOrderNo());
+			pstmt.setInt(2, menu.getMenuNo());
+			pstmt.setInt(3, menu.getOrderQuentity());
 			
 			result = pstmt.executeUpdate();
 			
@@ -148,28 +166,14 @@ public class MainDao {
 	}
 
 
-	public int selectOrderNo(Connection conn) throws Exception{
-		int orderNo = 0;
-		
-		try {
-			String sql = prop.getProperty("orderNo");
-			
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
-			
-			if(rs.next()) {
-				orderNo = rs.getInt(1);
-			}
-			
-		} finally {
-			close(rs);
-			close(stmt);
-		}
-		
-		return orderNo;
-	}
+	
 
-
+	/** 가격변동
+	 * @param conn
+	 * @param menu
+	 * @return result
+	 * @throws Exception
+	 */
 	public int updatePrice(Connection conn, Menu menu) throws Exception {
 		int result = 0;
 		
@@ -186,6 +190,32 @@ public class MainDao {
 			close(pstmt);
 		}
 		return result;
+	}
+
+
+	/** 다음 주문 번호 생성
+	 * @param conn
+	 * @return orderNo
+	 * @throws Exception
+	 */
+	public int nextOrderNo(Connection conn) throws Exception {
+		int orderNo = 0;
+		
+		try {
+			String sql = prop.getProperty("nextOrderNo");
+			
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if(rs.next()) {
+				orderNo = rs.getInt(1);
+			}
+			
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		return orderNo;
 	}
 
 }

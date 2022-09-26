@@ -95,8 +95,8 @@ public class MainService {
 		
 		Connection conn = getConnection();
 		
-		int orderNo = dao.selectOrderNo(conn);
-		menu.setOrderNo(orderNo);
+		int orderNo = dao.nextOrderNo(conn);
+		menu.setMenuNo(orderNo);
 		
 		int result = dao.orderMenu(conn, menu);
 		if(result > 0) {
