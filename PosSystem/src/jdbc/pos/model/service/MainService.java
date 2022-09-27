@@ -13,6 +13,22 @@ public class MainService {
 	private Connection conn;
 	
 	
+	/** 메뉴 목록 조회
+	 * @return menuList
+	 * @throws Exception
+	 */
+	public List<Menu> showMenuList() throws Exception {
+		Connection conn = getConnection();
+		
+		List<Menu> menuList = dao.showMenuList(conn);
+	
+		close(conn);
+		
+		return menuList;
+	}
+
+
+
 	/** 메뉴 중복 확인 서비스
 	 * @param menuName
 	 * @return result
@@ -50,22 +66,6 @@ public class MainService {
 
 
 
-	/** 메뉴 목록 조회
-	 * @return menuList
-	 * @throws Exception
-	 */
-	public List<Menu> showMenuList() throws Exception {
-		Connection conn = getConnection();
-		
-		List<Menu> menuList = dao.showMenuList(conn);
-	
-		close(conn);
-		
-		return menuList;
-	}
-
-
-
 	/** 메뉴 삭제 서비스
 	 * @param input
 	 * @return result
@@ -95,14 +95,13 @@ public class MainService {
 		
 		Connection conn = getConnection();
 		
-		int orderNo = dao.nextOrderNo(conn);
-		menu.setMenuNo(orderNo);
+//		int orderNo = dao.nextOrderNo(conn);
+//		menu.setMenuNo(orderNo);
 		
 		int result = dao.orderMenu(conn, menu);
-		if(result > 0) {
-			commit(conn);
-			result = orderNo;
-		}
+		if(result > 0) commit(conn);
+//			result = orderNo;
+//		}
 		else			rollback(conn);
 		
 		close(conn);

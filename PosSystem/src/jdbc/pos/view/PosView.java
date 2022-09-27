@@ -11,9 +11,10 @@ import jdbc.pos.model.vo.Menu;
 public class PosView {
 	private Scanner sc = new Scanner(System.in);
 	private MainService service = new MainService();
-	private Menu menu = null;
+	private Menu menu = new Menu();
 	
 	public void mainMenu() {
+		
 		int input = -1;
 		
 		do {
@@ -43,13 +44,40 @@ public class PosView {
 				}
 				
 			} catch(InputMismatchException e) {
-				System.out.println("\n숫자만 입력해주세요.");
+				System.out.println("\n입력 형식이 잘못되었습니다.");
 				sc.nextLine();
 			}
+			
 		} while (input != 0);
 	}
 
 	
+
+	/**
+	 * 메뉴 목록 조회
+	 */
+	private void showMenuList() {
+		
+		try {
+			
+			List<Menu> menuList = service.showMenuList();
+			
+			if(menuList.isEmpty()) {
+				System.out.println("\n판매 중인 메뉴가 없습니다.");
+			} else {
+				for(Menu menu : menuList) {
+				System.out.printf("\n%d | %10s | %d | %s" ,
+								menu.getMenuNo(), menu.getMenuName(), menu.getMenuPrice(), menu.getSaleFlag()); 
+				}	
+			}
+			
+		}catch(Exception e) {
+			System.out.println("\n[메뉴 리스트 확인 중 예외 발생]");
+			e.printStackTrace();
+		}
+	}
+
+
 
 	/**
 	 * 메뉴 주문
@@ -65,22 +93,20 @@ public class PosView {
 				int menuNo = sc.nextInt();
 				
 				System.out.print("수량 > ");
-				int order = sc.nextInt();
+				int orderQuentity = sc.nextInt();
 				
 				Menu menu = new Menu();
 				menu.setMenuNo(menuNo);
-				menu.setOrderQuentity(order);
+				menu.setOrderQuentity(orderQuentity);
 				
 				int result = service.orderMenu(menu);
 				
 				if(result > 0) {
-					Menu m = new Menu();
-					System.out.println("\n" + m.getMenuName() + "을/를 " + order+ "개 주문하셨습니다.");
+					System.out.println("\n 주문되었습니다."); // 메뉴를 몇개 주문했는지 
 						
 				} else {
 					System.out.println("\n주문 실패");
 				}
-			
 			}
 		} catch(Exception e) {
 			System.out.println("\n메뉴 주문 중 예외 발생");
@@ -127,7 +153,7 @@ public class PosView {
 			int result = service.addMenu(menu);
 			
 			if(result > 0) {
-				System.out.println("\n메뉴가 정상적으로 추가되었습니다.");
+				System.out.println("\n"+ menuName +" 메뉴가 정상적으로 추가되었습니다.");
 			} else {
 				System.out.println("\n메뉴 추가 실패");
 			}
@@ -174,32 +200,6 @@ public class PosView {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	/**
-	 * 메뉴 목록 조회
-	 */
-	private void showMenuList() {
-		
-		try {
-			
-			List<Menu> menuList = service.showMenuList();
-			
-			if(menuList.isEmpty()) {
-				System.out.println("\n판매 중인 메뉴가 없습니다.");
-			} else {
-				for(Menu menu : menuList) {
-				System.out.printf("\n%d | %10s | %d | %s" ,
-								menu.getMenuNo(), menu.getMenuName(), menu.getMenuPrice(), menu.getSaleFlag()); 
-				}	
-			}
-			
-		}catch(Exception e) {
-			System.out.println("\n[메뉴 리스트 확인 중 예외 발생]");
-			e.printStackTrace();
-		}
-	}
-	
 	
 	
 	/**

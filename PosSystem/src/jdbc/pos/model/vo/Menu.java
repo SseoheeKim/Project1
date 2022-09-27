@@ -10,18 +10,28 @@ public class Menu {
 	private int orderQuentity; // 판매수량
 	private String orderDate; // 판매일
 	private int orderNo; // 주문번호
+
+	private List<Menu> orderList;
 	
+
+
 	public Menu() {	}
 	
-	
-	public Menu(int menuNo, int orderNo) {
+
+	public Menu(int orderNo) {
 		super();
-		this.menuNo = menuNo;
 		this.orderNo = orderNo;
 	}
 
-	
 
+	public List<Menu> getOrderList() {
+		return orderList;
+	}
+	
+	
+	public void setOrderList(List<Menu> orderList) {
+		this.orderList = orderList;
+	}
 
 	public int getMenuNo() {
 		return menuNo;
@@ -65,9 +75,5 @@ public class Menu {
 	public void setOrderNo(int orderNo) {
 		this.orderNo = orderNo;
 	}
-	
-	
-	
-	
 	
 }

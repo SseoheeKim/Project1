@@ -24,7 +24,7 @@
 	
 	<!-- 메뉴 주문 -->
 	<entry key = "orderMenu">
-		INSERT INTO ORDER_TB VALUES(?, ?, ?, DEFAULT)
+		INSERT INTO ORDER_TB VALUES(SEQ_ORDER_NO.NEXTVAL, ?, ?, DEFAULT)
 	</entry>
 	
 	<!-- 주문 번호 생성 -->
