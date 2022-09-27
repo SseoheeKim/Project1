@@ -218,4 +218,38 @@ public class MainDao {
 		return orderNo;
 	}
 
+
+	/** 일자별 가격 조회
+	 * @param conn
+	 * @param date
+	 * @return m
+	 * @throws Exception
+	 */
+	public List<Menu> selectByDate(Connection conn, String date) throws Exception {
+		List<Menu> m = new ArrayList<>();
+		
+		try {
+
+			String sql = prop.getProperty("selectByDate");
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, date);
+			pstmt.setString(2, date);
+			
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				Menu menu = new Menu();
+				menu.setOrderDate(rs.getString("ORDER_DATE"));
+				menu.setMenuPrice(rs.getInt("SUM(MENU_PRICE)"));
+				m.add(menu);
+			}
+			
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return m;
+	}
+
 }

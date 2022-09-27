@@ -95,15 +95,10 @@ public class MainService {
 		
 		Connection conn = getConnection();
 		
-//		int orderNo = dao.nextOrderNo(conn);
-//		menu.setMenuNo(orderNo);
-		
 		int result = dao.orderMenu(conn, menu);
 		if(result > 0) commit(conn);
-//			result = orderNo;
-//		}
 		else			rollback(conn);
-		
+
 		close(conn);
 		
 		return result;
@@ -126,6 +121,23 @@ public class MainService {
 		else			rollback(conn);
 		
 		return result;
+	}
+
+
+
+	/** 일자별 판매금액 조회 서비스
+	 * @param date
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Menu> selectByDate(String date) throws Exception {
+		
+		Connection conn = getConnection();
+		List<Menu> m = dao.selectByDate(conn, date);
+
+		close(conn);
+		
+		return m;
 	}
 
 

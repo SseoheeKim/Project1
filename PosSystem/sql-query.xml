@@ -38,4 +38,13 @@
 		WHERE SALE_FL = 'Y'
 		AND MENU_NO = ?
 	</entry>
+	
+	<!-- 일자별 판매금액 조회(Select) -->
+	<entry key = "selectByDate">
+		SELECT ? ORDER_DATE, SUM(MENU_PRICE) 
+		FROM ORDER_TB
+		JOIN MENU USING(MENU_NO)
+		WHERE TO_CHAR(ORDER_DATE, 'YYYY-MM-DD') = ?
+	</entry>
+	
 </properties>
