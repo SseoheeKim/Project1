@@ -152,7 +152,6 @@ public class MainDao {
 			String sql = prop.getProperty("orderMenu");
 			
 			pstmt = conn.prepareStatement(sql);
-//			pstmt.setInt(1, menu.getOrderNo());
 			pstmt.setInt(1, menu.getMenuNo());
 			pstmt.setInt(2, menu.getOrderQuentity());
 			
