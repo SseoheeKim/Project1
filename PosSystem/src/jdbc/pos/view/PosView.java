@@ -26,6 +26,9 @@ public class PosView {
 				System.out.println("3. 메뉴 삭제");
 				System.out.println("4. 메뉴 가격 변경");
 				System.out.println("5. 일자별 판매 금액 조회");
+				System.out.println("6. 일자별 판매 내역 조회");
+				System.out.println("7. 메뉴별 판매 내역 조회");
+				
 				System.out.println("0. 프로그램 종료");
 				
 				System.out.print("\n메뉴 선택 >> ");
@@ -53,59 +56,32 @@ public class PosView {
 	
 
 	/**
-	 * 일자별 판매금액 조회
-	 */
-	private void selectByDate() {
-		
-		try {
-			System.out.println("\n***[일자별 판매 금액 조회]***");
-			System.out.print("\n조회할 날짜 입력(YYYY-MM-DD) : ");
-			String date = sc.nextLine();
-			
-			List<Menu> m =  service.selectByDate(date);
-			
-			if(m.isEmpty()) {
-				System.out.println("\n조회되는 내역이 없습니다.");
-			} else {
-				
-				for(Menu menu : m) {
-					System.out.printf("\n[%s] 판매 총액 : %d\n", menu.getOrderDate(), menu.getMenuPrice());
-				}
-				
-			}
-			
-		} catch(Exception e) {
-			System.out.println("\n일자별 판매 금액 조회 중 예외 발생");
-			
-			
-		}
-		
-	}
-
-
-
-	/**
 	 * 메뉴 목록 조회
 	 */
-	private void showMenuList() {
+	private List<Menu> showMenuList() {
+		List<Menu> menuList = null;
 		
 		try {
 			
-			List<Menu> menuList = service.showMenuList();
+			menuList = service.showMenuList();
 			
 			if(menuList.isEmpty()) {
 				System.out.println("\n판매 중인 메뉴가 없습니다.");
 			} else {
+				System.out.println("\n____________ 메뉴 목록 ___________\n");
 				for(Menu menu : menuList) {
-				System.out.printf("\n%d | %10s | %d | %s" ,
-								menu.getMenuNo(), menu.getMenuName(), menu.getMenuPrice(), menu.getSaleFlag()); 
-				}	
+				System.out.printf("%d | %10s | %d \n" ,
+								menu.getMenuNo(), menu.getMenuName(), menu.getMenuPrice()); 
+				}
+				System.out.println();
 			}
 			
 		}catch(Exception e) {
 			System.out.println("\n[메뉴 리스트 확인 중 예외 발생]");
 			e.printStackTrace();
 		}
+		
+		return menuList;
 	}
 
 
@@ -114,17 +90,21 @@ public class PosView {
 	 * 메뉴 주문
 	 */
 	private void orderMenu() {
-		
+				
 		try {
 					
 			while(true) {
-				System.out.println("\n*****[메뉴 주문]*****");
-				showMenuList();
+				
+				System.out.println("\n*********** 메뉴 주문 **********");
+				List<Menu> menuList = showMenuList();
+				
 				System.out.print("\n메뉴 선택 > ");
 				int menuNo = sc.nextInt();
+				sc.nextLine();
 				
 				System.out.print("수량 > ");
 				int orderQuentity = sc.nextInt();
+				sc.nextLine();
 				
 				Menu menu = new Menu();
 				menu.setMenuNo(menuNo);
@@ -132,13 +112,22 @@ public class PosView {
 				
 				int result = service.orderMenu(menu);
 				
+				
 				if(result > 0) {
-					System.out.println("\n 주문되었습니다."); // 메뉴를 몇개 주문했는지 
+					for(Menu m : menuList) {
+						if(m.getMenuNo() == menuNo) {
+							System.out.printf("\n%s %d잔, %d원입니다.", 
+									m.getMenuName(), orderQuentity, m.getMenuPrice() * orderQuentity);
+							break;
+						}
+					}
+					System.out.println("\n주문이 완료되었습니다.");
 					break;	
 				} else {
 					System.out.println("\n주문 실패");
 				}
-			}
+			} 
+			
 		} catch(Exception e) {
 			System.out.println("\n메뉴 주문 중 예외 발생");
 			e.printStackTrace();
@@ -155,10 +144,10 @@ public class PosView {
 		String menuName = null;
 		
 		try {
-			System.out.println("\n*****[메뉴 추가]*****\n");
+			System.out.println("\n*********** 새로운 메뉴 등록 ***********");
 			
 			while(true) {
-				System.out.print("추가할 메뉴 이름 : ");
+				System.out.print("\n새로 추가할 메뉴 이름 : ");
 				menuName = sc.nextLine();
 				
 				int result = service.menuDupCheck(menuName);
@@ -166,7 +155,7 @@ public class PosView {
 				if (result == 0) {
 					Menu m = new Menu();
 					m.setMenuName(menuName);
-					System.out.println("\n" + m.getMenuName() + "는/은 등록 가능한 메뉴입니다.");
+					System.out.println(m.getMenuName() + "는/은 등록 가능한 메뉴입니다. \n");
 					break;
 				} else {
 					System.out.println("\n이미 존재하는 메뉴입니다.");
@@ -184,13 +173,13 @@ public class PosView {
 			int result = service.addMenu(menu);
 			
 			if(result > 0) {
-				System.out.println("\n"+ menuName +" 메뉴가 정상적으로 추가되었습니다.");
+				System.out.println( menuName +" 메뉴가 정상적으로 추가되었습니다.");
 			} else {
 				System.out.println("\n메뉴 추가 실패");
 			}
 			
 		} catch(Exception e) {
-			System.out.println("\n 메뉴 추가 중 예외 발생");
+			System.out.println("\n메뉴 추가 중 예외 발생");
 			e.printStackTrace();
 		}	
 	}
@@ -202,7 +191,7 @@ public class PosView {
 	 */
 	private void deleteMenu() {
 		try {
-			System.out.println("\n*****[메뉴 삭제]*****");
+			System.out.println("\n*********** 메뉴 삭제 ***********");
 			showMenuList();
 			
 			System.out.print("\n삭제할 메뉴 선택 : ");
@@ -217,13 +206,16 @@ public class PosView {
 			
 			if(ch == 'Y') {
 				if(result > 0) {
-					System.out.println("\n메뉴가 삭제되었습니다.");
-					
+					System.out.println("\n선택하신 메뉴가 삭제되었습니다.");
+					System.out.print("기존 메뉴 삭제 후");
+					showMenuList();
 				} else {
 					System.out.println("\n메뉴 삭제 실패");
 				}
-			} else {
+			} else if(ch == 'N') {
 				System.out.println("\n메뉴 삭제를 취소합니다.");
+			} else {
+				System.out.println("\nY 또는 N를 입력하세요.");
 			}
 			
 		} catch(Exception e) {
@@ -238,7 +230,7 @@ public class PosView {
 	 */
 	private void updatePrice() {
 		try {
-			System.out.println("\n****가격 변경****");
+			System.out.println("\n*********** 가격 변경 ***********");
 			showMenuList();
 			
 			System.out.print("\n가격을 변경할 메뉴 선택 > ");
@@ -266,6 +258,38 @@ public class PosView {
 		} catch(Exception e) {
 			System.out.println("\n가격 변경 중 예외 발생");
 			e.printStackTrace();
+		}
+		
+	}
+
+
+
+	/**
+	 * 일자별 판매금액 조회
+	 */
+	private void selectByDate() {
+		
+		try {
+			System.out.println("\n*********** 일자별 판매 금액 조회 ***********");
+			System.out.print("\n조회할 날짜 입력(YYYY-MM-DD) : ");
+			String date = sc.nextLine();
+			
+			List<Menu> m =  service.selectByDate(date);
+			
+			if(m.isEmpty()) {
+				System.out.println("\n조회되는 내역이 없습니다.");
+			} else {
+				
+				for(Menu menu : m) {
+					System.out.printf("\n%s 일자 판매 총액 : %d원\n", menu.getOrderDate(), menu.getMenuPrice());
+				}
+				
+			}
+			
+		} catch(Exception e) {
+			System.out.println("\n일자별 판매 금액 조회 중 예외 발생");
+			
+			
 		}
 		
 	}

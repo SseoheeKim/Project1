@@ -4,7 +4,7 @@
 	<comment>sql-query.xml file</comment>
 	<!-- 메뉴명 중복 확인 -->
 	<entry key = "menuDupCheck">
-		SELECT MENU_NM FROM MENU WHERE MENU_NM = ?
+		SELECT MENU_NM FROM MENU WHERE SALE_FL = 'Y' AND MENU_NM = ? 
 	</entry>
 	
 	<!-- 메뉴 추가 -->
